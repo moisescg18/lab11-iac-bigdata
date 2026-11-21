@@ -1,0 +1,51 @@
+
+name: products_gold
+version: "1.0"
+description: Data product de ventas y métricas de productos agrupados por categoría.
+
+source:
+  layer: silver
+  table: lakehouse.silver.products
+
+destination:
+  layer: gold
+  table: lakehouse.gold.product_category_summary
+  format: iceberg
+
+fields:
+  - name: category
+    type: string
+    description: Categoría del producto.
+
+  - name: product_count
+    type: long
+    description: Cantidad de productos por categoría.
+
+  - name: average_price
+    type: decimal(13,2)
+    description: Precio promedio por categoría.
+
+  - name: average_rating
+    type: double
+    description: Calificación promedio.
+
+  - name: total_stock
+    type: long
+    description: Stock total por categoría.
+
+  - name: min_price
+    type: decimal(12,2)
+    description: Precio mínimo.
+
+  - name: max_price
+    type: decimal(12,2)
+    description: Precio máximo.
+
+  - name: generated_at
+    type: timestamp
+    description: Fecha y hora de generación.
+
+quality_rules:
+  - product_count > 0
+  - category is not null
+  - one row per category
